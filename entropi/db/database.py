@@ -1,5 +1,12 @@
 import os
+from pathlib import Path
+
 import psycopg2
+from dotenv import load_dotenv
+
+# charge le .env automatiquement depuis la racine du repo
+_env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+load_dotenv(_env_path)
 
 
 def get_connection():

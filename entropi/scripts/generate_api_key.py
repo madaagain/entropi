@@ -2,7 +2,8 @@ import argparse
 import sys
 import os
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+# add repo root to path so `entropi` package is importable
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from entropi.db.api_keys import create_api_key
 

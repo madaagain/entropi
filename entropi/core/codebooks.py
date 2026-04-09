@@ -51,7 +51,7 @@ def get_codebook(bit_width: int, dim: int) -> np.ndarray:
     chaque coordonnee du vecteur rote suit N(0, 1/dim)."""
 
     if bit_width not in CODEBOOK_DATA:
-        raise ValueError(f"bit_width doit etre dans {{1, 2, 3, 4}}, got {bit_width}")
+        raise ValueError(f"bit_width must be in {{1, 2, 3, 4}}, got {bit_width}")
 
     centroids = CODEBOOK_DATA[bit_width].copy()
     return centroids / np.sqrt(dim)

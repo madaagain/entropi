@@ -53,6 +53,8 @@ async def decompress(
             dim=dim,
         )
     except KeyError as e:
-        raise HTTPException(status_code=400, detail=f"Missing field in compressed data: {e}")
+        raise HTTPException(
+            status_code=400, detail=f"Missing field in compressed data: {e}"
+        )
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

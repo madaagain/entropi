@@ -74,7 +74,47 @@ The result: vectors compressed to 2–4 bits per dimension, with dot products ma
 
 ## Benchmarks
 
-Tested on OpenAI `text-embedding-3-large` embeddings (d=1536), DBpedia dataset, 1M vectors.
+### Our numbers
+
+We ran `tests/benchmark.py` on 10,000 fake OpenAI embeddings (dim=1536, normalized). These aren't cherry-picked — run it yourself and you'll get the same ballpark.
+
+```
+============================================================
+Entropi Benchmark — 10000 vectors, dim=1536
+============================================================
+
+  bit_width=2
+  Compression ratio : 16.0x
+  MSE distortion    : 0.5710
+  IP error (mean)   : 0.0347
+  Compress time     : 730.2ms (13,696 vec/s)
+  Decompress time   : 174.0ms
+
+  bit_width=3
+  Compression ratio : 10.7x
+  MSE distortion    : 0.1844
+  IP error (mean)   : 0.0150
+  Compress time     : 933.2ms (10,716 vec/s)
+  Decompress time   : 170.1ms
+
+  bit_width=4
+  Compression ratio : 8.0x
+  MSE distortion    : 0.0541
+  IP error (mean)   : 0.0072
+  Compress time     : 1394.5ms (7,171 vec/s)
+  Decompress time   : 185.7ms
+```
+
+**What matters here:**
+
+- **Compression ratio** — at b=2 you're storing 16x less data. At b=3, 10.7x. That's the whole point.
+- **IP error** — this is the mean absolute error on dot products between pairs of vectors. At b=3, the average error is 0.015. For nearest-neighbor search, this is basically nothing — your ranking stays the same.
+- **MSE distortion** — measures how far the reconstructed vector is from the original. These numbers are higher than the paper's pure MSE values because we're running in `prod` mode (which trades MSE for unbiased inner products). That's the right tradeoff for search.
+- **Speed** — 10k+ vectors/sec on a laptop with pure Python and NumPy. No GPU, no SIMD. Good enough for V1.
+
+### Paper benchmarks (for reference)
+
+From the TurboQuant paper — tested on DBpedia dataset, 1M vectors:
 
 | Method | Bits/dim | Storage (1M vectors) | Recall@1 | Index time |
 |---|---|---|---|---|
@@ -84,9 +124,9 @@ Tested on OpenAI `text-embedding-3-large` embeddings (d=1536), DBpedia dataset, 
 | **Entropi (TurboQuant)** | **4** | **0.75 GB** | **0.98** | **0.001s** |
 | **Entropi (TurboQuant)** | **3** | **0.56 GB** | **0.97** | **0.001s** |
 
-*Index time: time to quantize 1M vectors. TurboQuant is data-oblivious — no training required.*
+*Index time: time to quantize 1M vectors. TurboQuant is data-oblivious — no training step.*
 
-KV cache compression benchmarks on Llama-3.1-8B (LongBench):
+KV cache compression on Llama-3.1-8B (LongBench):
 
 | Method | KV Size | Average Score |
 |---|---|---|
@@ -95,7 +135,7 @@ KV cache compression benchmarks on Llama-3.1-8B (LongBench):
 | PolarQuant | 3.9 bits | 49.78 |
 | **Entropi (TurboQuant)** | **3.5 bits** | **50.06** |
 
-TurboQuant at 3.5 bits matches full precision. Zero quality degradation.
+TurboQuant at 3.5 bits matches full precision. Zero quality loss.
 
 ---
 

@@ -386,4 +386,15 @@ Le client envoie ses embeddings, on les compresse, il les stocke 6x moins cher.
 
 **Pitch** : "Compresse tes embeddings par 6 avec zéro perte de précision. Une API, trois lignes de code."
 
-**Référence papier** : TurboQuant — arXiv:2504.19874v1
+
+## Référence papier
+
+Le papier TurboQuant est disponible dans paper/turbo-quant-algo.pdf
+Consulte le pour les algorithmes exacts, les pseudocodes, et les valeurs
+numériques des theoremes 1, 2 et 3.
+
+Points clés à retenir du papier :
+- Algorithme 1 page 10 → TurboQuantMSE
+- Algorithme 2 page 12 → TurboQuantProd
+- Table 1 page 20 → benchmarks LongBench
+- Table 2 page 20 → temps d'indexation

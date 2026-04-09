@@ -241,7 +241,6 @@ entropi/
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
-└── CLAUDE.md                  # Context file for Claude Code
 ```
 
 ---

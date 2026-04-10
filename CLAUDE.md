@@ -398,3 +398,42 @@ Points clés à retenir du papier :
 - Algorithme 2 page 12 → TurboQuantProd
 - Table 1 page 20 → benchmarks LongBench
 - Table 2 page 20 → temps d'indexation
+
+# Entropi Platform
+
+## Stack
+- Next.js 14 App Router + TypeScript + Tailwind + Framer Motion
+- Déployé sur Vercel → entropi.dev
+
+## Design system
+- Background : #000000
+- Foreground : #ffffff
+- Muted : rgba(255,255,255,0.5)
+- Border : rgba(255,255,255,0.08)
+- Font sans : Inter / Font mono : JetBrains Mono
+
+## Structure
+app/page.tsx              ← landing page
+app/dashboard/page.tsx    ← dashboard
+components/hero/          ← Hero + VizCanvas
+components/sections/      ← Problem, Solution, Benchmarks, etc.
+components/dashboard/     ← ApiKeys, Usage, QuickStart, Profile
+lib/entropi.ts            ← appels API
+
+## API
+URL prod  : https://api.entropi.dev
+URL local : http://localhost:8000
+Demo key  : ent_demo_public
+Var env   : NEXT_PUBLIC_API_URL
+
+## Benchmarks à afficher
+- Compression ratio : 10.7x à 3 bits
+- Storage : 61 GB → 5.8 GB pour 10M vecteurs
+- Recall cluster : 100%
+- Index time : 0.001s vs 239s PQ vs 2267s RabitQ
+
+## Règles
+- Jamais d'URL hardcodée — toujours NEXT_PUBLIC_API_URL
+- Animations Framer Motion uniquement
+- Mobile first
+- npm run build sans erreur TypeScript avant chaque commit

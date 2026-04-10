@@ -1,9 +1,12 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from entropi.api.routes.compress import router as compress_router
 from entropi.api.routes.decompress import router as decompress_router
+from entropi.api.routes.auth import router as auth_router
+from entropi.api.routes.keys import router as keys_router
 from entropi.api.errors import setup_error_handlers
 from entropi.db.database import init_db
 
@@ -26,9 +29,20 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://entropi.dev"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 setup_error_handlers(app)
 app.include_router(compress_router)
 app.include_router(decompress_router)
+app.include_router(auth_router)
+app.include_router(keys_router)
 
 
 @app.get("/health")
